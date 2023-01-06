@@ -2,6 +2,7 @@ const bccrypt = require("bcrypt");
 const Admin = require("../models/admin.Schema");
 const { body, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
+const errorHandler = require("../utilities/error_handler.js").errorHandler;
 
 exports.register = (req, res) => {
   res.render("admin");
@@ -15,10 +16,10 @@ exports.register__post = [
     const { username, email, password } = req.body;
     try {
       const admin = await Admin.create({ username, email, password });
-      console.log(admin);
       res.status(201).json({ message: "success creating admin", admin: admin });
     } catch (err) {
-      console.log(err);
+      const errors = errorHandler(err);
+      res.status(400).json({ errors });
     }
   },
 ];
@@ -28,7 +29,6 @@ exports.login__post = [
   body("password").trim().escape(),
   async (req, res) => {
     const { email, password } = req.body;
-    console.log(email, password);
     try {
       const admin = await Admin.login(email, password);
       const token = jwt.sign(
@@ -37,7 +37,10 @@ exports.login__post = [
       );
       return res.status(200).json({ status: "ok", token });
     } catch (err) {
+      const errors = errorHandler(err);
       console.log(err);
+
+      return res.json({ status: "error", admin: false, errors });
     }
   },
 ];

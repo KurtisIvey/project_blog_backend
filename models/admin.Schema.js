@@ -6,7 +6,7 @@ const adminSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   password: {
     type: String,
     required: true,
@@ -22,8 +22,6 @@ adminSchema.pre("save", async function (next) {
 // static method to log in user
 adminSchema.statics.login = async function (email, password) {
   // this refers to the user model, enabled because we don't use an error function but rather function
-  // pass email alone because the email key and value are the same titled
-  // const user = await this.findOne({email: email})
   const admin = await this.findOne({ email });
   if (admin) {
     const auth = await bcrypt.compare(password, admin.password);
