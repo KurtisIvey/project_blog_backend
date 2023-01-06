@@ -33,6 +33,4 @@ adminSchema.statics.login = async function (email, password) {
   throw Error("incorrect email");
 };
 
-const Admin = mongoose.model("administrator", adminSchema);
-
-module.exports = Admin;
+module.exports = mongoose.model("Administrator", adminSchema);

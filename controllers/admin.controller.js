@@ -1,12 +1,11 @@
 const bccrypt = require("bcrypt");
-const Admin = require("../models/admin.Schema");
 const { body, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const errorHandler = require("../utilities/error_handler.js").errorHandler;
 
-exports.register = (req, res) => {
-  res.render("admin");
-};
+// imported models
+const Admin = require("../models/admin.Schema");
+const Post = require("../models/post.Schema");
 
 exports.register__post = [
   body("username").trim().escape().isLength({ min: 3 }),
@@ -14,13 +13,18 @@ exports.register__post = [
   body("password").trim().escape(),
   async (req, res) => {
     const { username, email, password } = req.body;
-    try {
-      const admin = await Admin.create({ username, email, password });
-      res.status(201).json({ message: "success creating admin", admin: admin });
-    } catch (err) {
-      const errors = errorHandler(err);
-      res.status(400).json({ errors });
-    }
+
+    const admin = new Admin({ username, email, password });
+    admin.save((err) => {
+      if (err) {
+        const errors = errorHandler(err);
+        res.status(400).json({ errors });
+      } else {
+        res
+          .status(201)
+          .json({ message: "success creating admin", admin: admin });
+      }
+    });
   },
 ];
 
@@ -32,7 +36,7 @@ exports.login__post = [
     try {
       const admin = await Admin.login(email, password);
       const token = jwt.sign(
-        { username: admin.username, email: admin.email },
+        { username: admin.username, email: admin.email, _id: admin._id },
         "secret123"
       );
       return res.status(200).json({ status: "ok", token });
@@ -41,6 +45,22 @@ exports.login__post = [
       console.log(err);
 
       return res.json({ status: "error", admin: false, errors });
+    }
+  },
+];
+
+exports.newPost__post = [
+  body("title").trim().escape(),
+  body("textContent").trim().escape(),
+  async (req, res) => {
+    try {
+      const token = req.headers["token"];
+      const decoded = jwt.verify(token, "secret123");
+
+      return res.json({ token: decoded });
+    } catch (err) {
+      console.log(err);
+      res.json({ status: "error", error: "invalid token" });
     }
   },
 ];

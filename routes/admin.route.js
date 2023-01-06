@@ -6,9 +6,11 @@ const router = express.Router();
 const adminController = require("../controllers/admin.controller");
 
 // register router to get admin into admin collection
-router.get("/register", adminController.register);
+//router.get("/register", adminController.register);
 router.post("/register", adminController.register__post);
 router.post("/login", adminController.login__post);
+
+router.post("/posts/new-post", adminController.newPost__post);
 
 /* 
 // login , logout controlled via deletion of jwt on client side
@@ -28,6 +30,5 @@ router.delete("/posts/:id", adminController.post__delete);
 
 // new post
 router.get("/posts/new-post", adminController.newPost);
-router.post("/posts/new-post", adminController.newPost__post);
 */
 module.exports = router;
