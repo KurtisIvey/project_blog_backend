@@ -1,4 +1,4 @@
-function errorHandler(err) {
+function loginErrorHandler(err) {
   let errors = { email: "", password: "" };
   if (err.message === "incorrect email") {
     errors.email = "That email is not registered";
@@ -9,7 +9,19 @@ function errorHandler(err) {
   if (err.code === 11000) {
     errors.email = "that email is already registered";
   }
+
   return errors;
 }
 
-module.exports = { errorHandler };
+function postErrorHandler(err) {
+  let error;
+  if (
+    err.message ===
+    "Post validation failed: textContent: Path `textContent` is required."
+  ) {
+    error = "Post content field cannot be empty";
+  }
+  return error;
+}
+
+module.exports = { loginErrorHandler, postErrorHandler };
