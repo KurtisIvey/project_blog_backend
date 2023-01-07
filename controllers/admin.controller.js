@@ -1,9 +1,8 @@
-const bccrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 const { body, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
-
-let csrfToken;
+const { isAuth, cookieTest, isAdmin } = require("../middleware/auth.js");
 
 // error handlers
 const loginErrorHandler =
@@ -39,20 +38,21 @@ exports.login__post = [
   body("password").trim().escape(),
   async (req, res) => {
     const { email, password } = req.body;
-    csrfToken = uuidv4();
     try {
       const admin = await Admin.login(email, password);
+
       const token = jwt.sign(
         {
           username: admin.username,
           email: admin.email,
           _id: admin._id,
-          csrfToken,
+          isAdmin: admin.admin,
+          //csrfToken,
         },
-        "secret123"
+        process.env.SECRET
       );
       res.cookie("jwtToken", token, { httpOnly: true });
-      res.cookie("csrfToken", csrfToken, { httpOnly: true });
+
       return res.status(200).json({ status: "ok", token });
     } catch (err) {
       const errors = loginErrorHandler(err);
@@ -63,19 +63,22 @@ exports.login__post = [
   },
 ];
 
-exports.posts = async (req, res) => {
-  console.log(req.cookies);
-  const posts = await Post.find({}).populate("author").exec();
-  res.json({ posts });
-};
+exports.posts = [
+  isAdmin,
+  async (req, res) => {
+    const posts = await Post.find({}).populate("author").exec();
+    res.json({ posts });
+  },
+];
 
 exports.newPost__post = [
+  //isAuth,
   body("title").trim().escape(),
   body("textContent").trim().escape(),
   async (req, res) => {
     try {
       const token = req.headers["token"];
-      const decoded = jwt.verify(token, "secret123");
+      const decoded = jwt.verify(token, process.env.SECRET);
       const post = new Post({
         title: req.body.title,
         textContent: req.body.textContent,
