@@ -5,7 +5,7 @@ const path = require("path");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
 //must have port setup this way because heroku uses the env PORT on deployment
 const port = process.env.PORT || 3001;
@@ -16,6 +16,7 @@ const adminRouter = require("./routes/admin.route");
 // middlewares
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 //app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 

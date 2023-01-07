@@ -1,6 +1,9 @@
 const bccrypt = require("bcrypt");
 const { body, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
+const { v4: uuidv4 } = require("uuid");
+
+let csrfToken;
 
 // error handlers
 const loginErrorHandler =
@@ -36,12 +39,20 @@ exports.login__post = [
   body("password").trim().escape(),
   async (req, res) => {
     const { email, password } = req.body;
+    csrfToken = uuidv4();
     try {
       const admin = await Admin.login(email, password);
       const token = jwt.sign(
-        { username: admin.username, email: admin.email, _id: admin._id },
+        {
+          username: admin.username,
+          email: admin.email,
+          _id: admin._id,
+          csrfToken,
+        },
         "secret123"
       );
+      res.cookie("jwtToken", token, { httpOnly: true });
+      res.cookie("csrfToken", csrfToken, { httpOnly: true });
       return res.status(200).json({ status: "ok", token });
     } catch (err) {
       const errors = loginErrorHandler(err);
@@ -52,22 +63,12 @@ exports.login__post = [
   },
 ];
 
-/*exports.newPost__post = [
-  body("title").trim().escape(),
-  body("textContent").trim().escape(),
-  async (req, res) => {
-    try {
-      const token = req.headers["token"];
-      const decoded = jwt.verify(token, "secret123");
+exports.posts = async (req, res) => {
+  console.log(req.cookies);
+  const posts = await Post.find({}).populate("author").exec();
+  res.json({ posts });
+};
 
-      return res.json({ token: decoded });
-    } catch (err) {
-      console.log(err);
-      res.json({ status: "error", error: "invalid token" });
-    }
-  },
-];
-*/
 exports.newPost__post = [
   body("title").trim().escape(),
   body("textContent").trim().escape(),

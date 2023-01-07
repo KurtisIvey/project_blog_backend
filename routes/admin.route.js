@@ -10,6 +10,8 @@ const adminController = require("../controllers/admin.controller");
 router.post("/register", adminController.register__post);
 router.post("/login", adminController.login__post);
 
+router.get("/posts", adminController.posts);
+
 router.post("/posts/new-post", adminController.newPost__post);
 
 /* 
@@ -17,7 +19,6 @@ router.post("/posts/new-post", adminController.newPost__post);
 router.get("/login", adminController.login);
 
 // posts/admin home
-router.get("/posts", adminController.posts);
 
 // single post
 router.get("/posts/:id", adminController.post);
