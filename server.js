@@ -12,17 +12,14 @@ const port = process.env.PORT || 3001;
 
 // routes
 const adminRouter = require("./routes/admin.route");
+const postRouter = require("./routes/post.route");
+const userRouter = require("./routes/user.route");
 
 // middlewares
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-//app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
-
-// temp ejs implementation to register admin
-//app.set("views", path.join(__dirname, "views"));
-//app.set("view engine", "ejs");
 
 // mongodb
 const mongoose = require("mongoose");
@@ -33,6 +30,8 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 app.use("/admin", adminRouter);
+app.use("/posts", postRouter);
+app.use("/", userRouter);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

@@ -16,15 +16,16 @@ const adminSchema = new mongoose.Schema({
   },
 });
 
+/**
 adminSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt();
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
+ */
 
 // static method to log in user
 adminSchema.statics.login = async function (email, password) {
-  // this refers to the user model, enabled because we don't use an error function but rather function
   const admin = await this.findOne({ email });
   if (admin) {
     const auth = await bcrypt.compare(password, admin.password);

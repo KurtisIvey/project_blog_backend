@@ -7,12 +7,8 @@ const adminController = require("../controllers/admin.controller");
 
 // register router to get admin into admin collection
 //router.get("/register", adminController.register);
-router.post("/register", adminController.register__post);
+//router.post("/register", adminController.register__post);
 router.post("/login", adminController.login__post);
-
-router.get("/posts", adminController.posts);
-
-router.post("/posts/new-post", adminController.newPost__post);
 
 /* 
 // login , logout controlled via deletion of jwt on client side

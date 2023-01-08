@@ -5,7 +5,8 @@ const router = express.Router();
 const userController = require("../controllers/user.controller");
 
 // homepage that shows all blog posts
-router.get("/posts", userController.posts);
-router.get("/posts/:id", userController.post);
-router.get("/posts/:id/comments", userController.post_comments);
-router.post("/posts/:id/comments", userController.post_comments__post);
+router.post("/register", userController.register__post);
+router.post("/login", userController.login__post);
+//router.delete("/logout", userController.logout__delete);
+
+module.exports = router;
