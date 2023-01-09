@@ -46,7 +46,7 @@ module.exports.isAdmin = (req, res, next) => {
     console.log(err);
     res.status(401).json({
       status: "error",
-      error: "unauthorized access",
+      error: "unauthorized access, AdminJwt not present",
       message: err.message,
     });
   }

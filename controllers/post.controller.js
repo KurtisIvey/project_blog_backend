@@ -15,12 +15,31 @@ exports.posts = [
 exports.specificPost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id).populate("author").exec();
-    console.log(post);
-    //res.status(200).json({ post });
+    //console.log(post);
+    if (post === null) {
+      res.status(404).json({ status: "error", error: "post does not exist" });
+    } else {
+      res.status(200).json({ post });
+    }
   } catch (err) {
     res.status(400).json({ status: "error", error: err });
   }
 };
+
+exports.specificPost__delete = [
+  isAdmin,
+  async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id).populate("author").exec();
+
+      await post.remove();
+      res.status(202).json({ status: "ok", message: "deletion successful" });
+    } catch (err) {
+      //console.log(err);
+      res.status(400).json({ status: "error", message: err.message });
+    }
+  },
+];
 
 exports.newPost__post = [
   isAdmin,
