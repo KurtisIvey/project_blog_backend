@@ -12,6 +12,16 @@ exports.posts = [
   },
 ];
 
+exports.specificPost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id).populate("author").exec();
+    console.log(post);
+    //res.status(200).json({ post });
+  } catch (err) {
+    res.status(400).json({ status: "error", error: err });
+  }
+};
+
 exports.newPost__post = [
   isAdmin,
   body("title").trim().escape(),
