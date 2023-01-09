@@ -42,7 +42,9 @@ exports.login__post = [
           email: user.email,
           _id: user._id,
         },
-        process.env.SECRET
+        process.env.SECRET,
+        // 3 hour expire
+        { expiresIn: 60 * 60 * 3 }
       );
       res.cookie("userJwtToken", token, { httpOnly: true });
 
@@ -55,3 +57,13 @@ exports.login__post = [
     }
   },
 ];
+
+exports.logout__delete = (req, res) => {
+  try {
+    res
+      .clearCookie("userJwtToken")
+      .json({ status: "ok", message: "successfully cleared userJwtToken" });
+  } catch (err) {
+    console.log("clear cookie failed");
+  }
+};

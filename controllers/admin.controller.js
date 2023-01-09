@@ -24,7 +24,9 @@ exports.login__post = [
           _id: admin._id,
           isAdmin: admin.admin,
         },
-        process.env.SECRET
+        process.env.SECRET,
+        // 3 hour expire
+        { expiresIn: 60 * 60 * 3 }
       );
       res.cookie("adminJwtToken", token, { httpOnly: true });
 
@@ -37,3 +39,13 @@ exports.login__post = [
     }
   },
 ];
+
+exports.logout__delete = (req, res) => {
+  try {
+    res
+      .clearCookie("adminJwtToken")
+      .json({ status: "ok", message: "successfully cleared adminJwtToken" });
+  } catch (err) {
+    console.log("clear cookie failed");
+  }
+};

@@ -9,6 +9,7 @@ const adminController = require("../controllers/admin.controller");
 //router.get("/register", adminController.register);
 //router.post("/register", adminController.register__post);
 router.post("/login", adminController.login__post);
+router.delete("/logout", adminController.logout__delete);
 
 /* 
 // login , logout controlled via deletion of jwt on client side
