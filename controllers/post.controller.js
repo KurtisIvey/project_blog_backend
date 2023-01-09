@@ -2,6 +2,8 @@ const { body } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const { isAdmin } = require("../middleware/auth.js");
 const Post = require("../models/post.Schema");
+const Comment = require("../models/comment.Schema");
+const { commentErrorHandler } = require("../utilities/error_handler.js");
 const postErrorHandler =
   require("../utilities/error_handler.js").postErrorHandler;
 
@@ -66,6 +68,44 @@ exports.newPost__post = [
       });
     } catch (err) {
       res.json({ status: "error", error: err.message });
+    }
+  },
+];
+
+exports.comments = (req, res) => {
+  try {
+    console.log("hi");
+  } catch (err) {
+    res.status(400).json({ status: "error", error: err.message });
+  }
+};
+
+exports.comments__post = [
+  body("comment").trim().escape(),
+  async (req, res) => {
+    //console.log(req.params.id);
+    try {
+      const token = req.cookies.userJwtToken;
+      const decoded = jwt.verify(token, process.env.SECRET);
+      const comment = new Comment({
+        comment: req.body.comment,
+        author: decoded._id,
+        postRef: req.params.id,
+      });
+      comment.save((err) => {
+        if (err) {
+          //const error = postErrorHandler(err);
+          res.status(400).json({ status: "error", error: err });
+        } else {
+          res
+            .status(201)
+            .json({ status: "ok", message: "comment creation success" });
+        }
+      });
+    } catch (err) {
+      console.log(err.message);
+      //const error = commentErrorHandler(err);
+      //res.status(400).json({ status: "error", error, err: err.message });
     }
   },
 ];

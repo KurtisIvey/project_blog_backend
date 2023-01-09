@@ -24,4 +24,15 @@ function postErrorHandler(err) {
   return error;
 }
 
-module.exports = { loginErrorHandler, postErrorHandler };
+function commentErrorHandler(err) {
+  let error;
+  if (err.message === "jwt must be provided") {
+    error = "No user is currently logged in";
+  }
+  if (err.message === "invalid token") {
+    error = "invalid token authorization";
+  }
+  return error;
+}
+
+module.exports = { loginErrorHandler, postErrorHandler, commentErrorHandler };
