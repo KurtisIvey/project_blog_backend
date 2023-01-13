@@ -30,7 +30,10 @@ function commentErrorHandler(err) {
     error = "No user is currently logged in";
   }
   if (err.message === "invalid token") {
-    error = "invalid token authorization";
+    error = "Invalid token authorization";
+  }
+  if (err.kind === "ObjectId") {
+    error = "Invalid post id reference";
   }
   return error;
 }

@@ -9,7 +9,10 @@ const postErrorHandler =
 
 exports.posts = [
   async (req, res) => {
-    const posts = await Post.find({}).populate("author").exec();
+    const posts = await Post.find({})
+      .sort({ timestamp: -1 })
+      .populate("author")
+      .exec();
     res.json({ posts });
   },
 ];
@@ -72,11 +75,18 @@ exports.newPost__post = [
   },
 ];
 
-exports.comments = (req, res) => {
+exports.comments = async (req, res) => {
   try {
-    console.log("hi");
+    const postId = req.params.id;
+    const comments = await Comment.find({ postRef: postId })
+      .sort({ timestamp: 1 })
+      .populate("author")
+      .exec();
+    //console.log(comments);
+    res.status(200).json({ comments });
   } catch (err) {
-    res.status(400).json({ status: "error", error: err.message });
+    const error = commentErrorHandler(err);
+    res.status(400).json({ status: "error", error });
   }
 };
 
@@ -103,9 +113,26 @@ exports.comments__post = [
         }
       });
     } catch (err) {
-      console.log(err.message);
-      //const error = commentErrorHandler(err);
-      //res.status(400).json({ status: "error", error, err: err.message });
+      //console.log(err.message);
+      const error = commentErrorHandler(err);
+      res.status(400).json({ status: "error", error, err: err.message });
+    }
+  },
+];
+
+exports.comment__delete = [
+  //isAdmin,
+  async (req, res) => {
+    try {
+      const comment = await Comment.findById(req.params.id);
+
+      await comment.remove();
+      res
+        .status(202)
+        .json({ status: "ok", message: "deletion of comment successful" });
+    } catch (err) {
+      //console.log(err);
+      res.status(400).json({ status: "error", message: err.message });
     }
   },
 ];

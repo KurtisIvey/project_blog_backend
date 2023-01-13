@@ -46,9 +46,17 @@ exports.login__post = [
         // 3 hour expire
         { expiresIn: 60 * 60 * 3 }
       );
-      res.cookie("userJwtToken", token, { httpOnly: true });
+      res.cookie("userJwtToken", token);
 
-      return res.status(200).json({ status: "ok", token });
+      return res.status(200).json({
+        status: "ok",
+        token,
+        user: {
+          username: user.username,
+          email: user.email,
+          _id: user._id,
+        },
+      });
     } catch (err) {
       const errors = loginErrorHandler(err);
       console.log(err);

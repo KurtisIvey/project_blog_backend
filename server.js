@@ -29,9 +29,12 @@ mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-app.use("/admin", adminRouter);
-app.use("/posts", postRouter);
-app.use("/", userRouter);
+app.get("/", (req, res) => {
+  res.redirect("/api");
+});
+app.use("/api/admin", adminRouter);
+app.use("/api/posts", postRouter);
+app.use("/api/", userRouter);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
