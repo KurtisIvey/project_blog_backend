@@ -9,6 +9,7 @@ const postErrorHandler =
 
 exports.posts = [
   async (req, res) => {
+    console.log(req.locals);
     const posts = await Post.find({})
       .sort({ timestamp: -1 })
       .populate("author")
@@ -93,9 +94,8 @@ exports.comments = async (req, res) => {
 exports.comments__post = [
   body("comment").trim().escape(),
   async (req, res) => {
-    //console.log(req.params.id);
     try {
-      const token = req.cookies.userJwtToken;
+      const token = req.headers.authorization;
       const decoded = jwt.verify(token, process.env.SECRET);
       const comment = new Comment({
         comment: req.body.comment,
@@ -107,9 +107,10 @@ exports.comments__post = [
           //const error = postErrorHandler(err);
           res.status(400).json({ status: "error", error: err });
         } else {
-          res
-            .status(201)
-            .json({ status: "ok", message: "comment creation success" });
+          res.status(200).json({
+            status: "success",
+            message: "comment posted successfully",
+          });
         }
       });
     } catch (err) {

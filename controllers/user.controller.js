@@ -46,7 +46,8 @@ exports.login__post = [
         // 3 hour expire
         { expiresIn: 60 * 60 * 3 }
       );
-      res.cookie("userJwtToken", token);
+      // heroku eco plan doesn't allow me to set cookies, so jwt stored via local storage and passed via client header
+      //res.cookie("userJwtToken", token);
 
       return res.status(200).json({
         status: "ok",
@@ -69,7 +70,7 @@ exports.login__post = [
 exports.logout__delete = (req, res) => {
   try {
     res
-      .clearCookie("userJwtToken")
+      //.clearCookie("userJwtToken")
       .json({ status: "ok", message: "successfully cleared userJwtToken" });
   } catch (err) {
     console.log("clear cookie failed");
