@@ -16,12 +16,13 @@ const postRouter = require("./routes/post.route");
 const userRouter = require("./routes/user.route");
 
 // middlewares
-app.use(
+/** app.use(
   cors({
     credentials: true,
     origin: "https://kitsunebackfire.github.io/project-blog-client",
   })
-);
+);*/
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
