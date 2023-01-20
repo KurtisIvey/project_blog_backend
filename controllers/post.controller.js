@@ -9,7 +9,6 @@ const postErrorHandler =
 
 exports.posts = [
   async (req, res) => {
-    console.log(req.locals);
     const posts = await Post.find({})
       .sort({ timestamp: -1 })
       .populate("author")
