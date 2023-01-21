@@ -17,7 +17,16 @@ const userRouter = require("./routes/user.route");
 
 // middlewares
 /** */
-app.use(cors());
+app.use(
+  cors({
+    methods: "GET,HEAD,PUT,PATCH,DELETE",
+    credentials: true,
+    origin: [
+      "http://localhost:3000",
+      "https://kitsunebackfire.github.io/project-blog-client/",
+    ],
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
