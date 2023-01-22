@@ -21,6 +21,7 @@ const userRouter = require("./routes/user.route");
 
 app.use(
   cors({
+    credentials: true,
     methods: "GET,HEAD,PUT,PATCH,DELETE",
 
     origin: [
