@@ -17,6 +17,14 @@ const userRouter = require("./routes/user.route");
 
 // middlewares
 /** */
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, HEAD, OPTIONS, POST, PUT, DELETE"
+  );
+});
+
 app.use(
   cors({
     methods: "GET,HEAD,PUT,PATCH,DELETE",
