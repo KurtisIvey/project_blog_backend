@@ -23,7 +23,10 @@ app.use(
   cors({
     methods: "GET,HEAD,PUT,PATCH,DELETE",
 
-    origin: ["http://localhost:3000", "github.io"],
+    origin: [
+      "http://localhost:3000",
+      "https://kitsunebackfire.github.io/project-blog-client/",
+    ],
   })
 );
 app.use(express.json());
