@@ -17,30 +17,13 @@ const userRouter = require("./routes/user.route");
 
 // middlewares
 /** */
-app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://kitsunebackfire.github.io/project-blog-client/"
-  );
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, HEAD, OPTIONS, POST, PUT, DELETE"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-type, Accept"
-  );
-  next();
-});
+// Add Access Control Allow Origin headers
 
 app.use(
   cors({
     methods: "GET,HEAD,PUT,PATCH,DELETE",
 
-    origin: [
-      "http://localhost:3000",
-      "https://kitsunebackfire.github.io/project-blog-client/",
-    ],
+    origin: ["http://localhost:3000", "github.io"],
   })
 );
 app.use(express.json());
