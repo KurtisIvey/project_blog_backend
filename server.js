@@ -26,6 +26,8 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://kitsunebackfire.github.io/project-blog-client/",
+      "https://kitsunebackfire.github.io",
+      "https://kitsunebackfire.github.io/project-blog-client",
     ],
   })
 );
