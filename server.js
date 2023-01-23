@@ -21,6 +21,8 @@ const userRouter = require("./routes/user.route");
 
 app.use(
   cors({
+    // setting credentials true allows access-control header to true as well
+    // absolute requirement, otherwise cors issues will follow
     credentials: true,
     methods: "GET,HEAD,PUT,PATCH,DELETE",
 
