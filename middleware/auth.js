@@ -4,7 +4,7 @@ module.exports.isAdmin = (req, res, next) => {
   // custom middleware that verifies property set manually in the db to authorize access
   try {
     const token = req.headers.authorization;
-    const decoded = jwt.verify(token, process.env.SECRET);
+    const decodedJwt = jwt.verify(token, process.env.SECRET);
 
     if (decodedJwt.isAdmin !== true) {
       res.status(401).json({
