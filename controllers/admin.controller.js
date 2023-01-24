@@ -28,7 +28,7 @@ exports.login__post = [
         // 3 hour expire
         { expiresIn: 60 * 60 * 3 }
       );
-      res.cookie("adminJwtToken", token, { httpOnly: true });
+      //res.cookie("adminJwtToken", token, { httpOnly: true });
 
       return res.status(200).json({ status: "ok", token });
     } catch (err) {

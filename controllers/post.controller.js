@@ -31,11 +31,29 @@ exports.specificPost = async (req, res) => {
   }
 };
 
+exports.specificPost__put = [
+  isAdmin,
+  async (req, res) => {
+    let post;
+    try {
+      post = await Post.findByIdAndUpdate(req.params.id, {
+        title: req.body.title,
+        textContent: req.body.textContent,
+      });
+      res
+        .status(200)
+        .json({ status: "ok", message: "post updated successfully" });
+    } catch (err) {
+      res.status(400).json({ status: "error", message: err.message });
+    }
+  },
+];
+
 exports.specificPost__delete = [
   isAdmin,
   async (req, res) => {
     try {
-      const post = await Post.findById(req.params.id).populate("author").exec();
+      const post = await Post.findById(req.params.id);
 
       await post.remove();
       res.status(202).json({ status: "ok", message: "deletion successful" });
