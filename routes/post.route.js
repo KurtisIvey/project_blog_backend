@@ -10,6 +10,5 @@ router.delete("/:id", postController.specificPost__delete);
 //comments
 router.get("/:id/comments", postController.comments);
 router.post("/:id/comments", postController.comments__post);
-router.delete("/:id/comments", postController.comment__delete);
 
 module.exports = router;
