@@ -52,7 +52,7 @@ exports.newPost__post = [
   body("textContent").trim().escape(),
   async (req, res) => {
     try {
-      const token = req.cookies.adminJwtToken;
+      const token = req.headers.authorization;
       const decoded = jwt.verify(token, process.env.SECRET);
       const post = new Post({
         title: req.body.title,
